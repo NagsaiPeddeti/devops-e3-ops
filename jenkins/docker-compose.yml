@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  jenkins:
+      image: jenkins/jenkins:lts
+      stop_grace_period: 10s
+      ports:
+        - 8080:8080
+      deploy:
+         replicas: 1
+         update_config:
+           parallelism: 1
+           delay: 10s
+         restart_policy:
+           condition: on-failure
+           delay: 5s
+           max_attempts: 3
+           window: 30s
+         resources:
+           limits:
+              cpus: "0.5"
+              memory: 0.5G
+          placement:
+            constraints:
+              - "node.role==manager"
+              - "node.hostname==ip-172-31-19-183"
+      environment:
+        - "TZ=Asia/Kolkata"
+      volumes:
+        - jenkins_home:/var/jenkins_home
+      networks:
+        - internal
+networks:
+  internal:
+    driver: overlay
+    driver_opts:
+      encrypted: "true"
+volumes:
+  jenkins_home:
+
+
+        
