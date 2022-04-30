@@ -87,6 +87,8 @@ services:
     restart: unless-stopped
     volumes:
       - grafana_data:/var/lib/grafana
+    ports:
+      - 8081:3000
     deploy:
       replicas: 1
       update_config:
@@ -110,3 +112,29 @@ services:
     environment:
       - TZ=Asia/Kolkata
       - GF_SECURITY_ADMIN_PASSWORD=Devops@2022
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest 
+    hostname: cadvisor-{{.Node.Hostname}}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
+      - /:/rootfs:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /etc/hostname:/etc/hostname:ro
+      - /var/run:/var/run:ro
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.5G
+    environment:
+      - TZ=Asia/Kolkata
+      - NODE_ID={{.Node.ID}}
+    networks:
+      - monitoring
