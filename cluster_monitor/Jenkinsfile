@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('configs checkout') {
             steps {
-               checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NagsaiPeddeti/devops-e3-ops.git']]])
+               checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NagsaiPeddeti/devops-e3-ops.git']]])
             }
         }
         stage('publish to server and deploy') {
