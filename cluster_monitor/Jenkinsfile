@@ -1,8 +1,6 @@
 pipeline {
 
-    environment {
-       // CI = 'true'
-    }
+    agent any;
     stages {
         stage('configs checkout') {
             steps {
