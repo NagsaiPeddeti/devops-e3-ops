@@ -5,23 +5,41 @@ networks:
     driver: 
     
 volumes:
-  prometheus_data: {}
+  prometheus_data: 
+  grafana_data:
+configs:
+  prometheus.yml:
+    name: ${PROMETHEUS_CONFIG_NAME}
+    external: true
 
 services:
-  node-exporter:
+  node_exporter:
     image: prom/node-exporter:latest
-    restart: unless-stopped
+    hostname: node_exporter-{{.Node.Hostname}}
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
+      - /etc/hostname:/etc/hostname:ro
     command:
       - '--path.procfs=/host/proc'
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    expose:
-      - 9100
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.5G
+    environment:
+      - TZ=Asia/Kolkata
+      - NODE_ID={{.Node.ID}}
     networks:
       - monitoring
 
@@ -29,15 +47,64 @@ services:
     image: prom/prometheus:latest
     restart: unless-stopped
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
+    configs:
+      - source: prometheus.yml
+        target: /etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    expose:
-      - 9090
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.5G
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==ip-172-31-19-183"    
     networks:
       - monitoring
+    environment:
+      - TZ=Asia/Kolkata
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.5G
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==ip-172-31-19-183"    
+    networks:
+      - monitoring
+    environment:
+      - TZ=Asia/Kolkata
+      - GF_SECURITY_ADMIN_PASSWORD=Devops@2022

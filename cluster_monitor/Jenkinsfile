@@ -1,0 +1,19 @@
+pipeline {
+
+    environment {
+       // CI = 'true'
+    }
+    stages {
+        stage('configs checkout') {
+            steps {
+               checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NagsaiPeddeti/devops-e3-ops.git']]])
+            }
+        }
+        stage('publish to server and deploy') {
+            steps {
+               sshPublisher(publishers: [sshPublisherDesc(configName: 'docker3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+       
+    }
+}
