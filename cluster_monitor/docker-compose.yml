@@ -3,7 +3,8 @@ version: '3.8'
 networks:
   monitoring:
     driver: overlay
-    encrypted: true
+    driver_opts:
+      encrypted: "true"
     
 volumes:
   prometheus_data: 
