@@ -9,7 +9,7 @@ pipeline {
         }
         stage('publish to server and deploy') {
             steps {
-             sshPublisher(publishers: [shPublisherDesc(configName: 'docker3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cd registry && sh deploy.sh', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'registry/**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+             sshPublisher(publishers: [sshPublisherDesc(configName: 'docker3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cd registry && sh deploy.sh', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'registry/**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
        
