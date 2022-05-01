@@ -10,7 +10,8 @@ services:
       - cluster.initial_master_nodes=opensearch-node1,opensearch-node2
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
-      - TZ=Asia/Kolkata    
+      - TZ=Asia/Kolkata   
+      - MAX_MAP_COUNT=262144 
     volumes:
       - opensearch-data1:/usr/share/opensearch/data
     networks:
@@ -45,6 +46,7 @@ services:
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - TZ=Asia/Kolkata
+      - MAX_MAP_COUNT=262144 
     volumes:
       - opensearch-data2:/usr/share/opensearch/data
     deploy:
