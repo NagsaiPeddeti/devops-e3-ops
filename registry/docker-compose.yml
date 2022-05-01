@@ -1,4 +1,6 @@
-registry:
+version: "3.8"
+services:
+ registry:
   restart: always
   image: registry:2.8.1
   ports:
