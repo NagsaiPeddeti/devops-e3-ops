@@ -77,7 +77,7 @@ services:
       placement:
         constraints:
           - "node.role==manager"
-          - "node.hostname==ip-172-31-19-183"    
+          - "node.hostname==ip-172.31.28.245"    
     networks:
       - monitoring
     environment:
@@ -106,7 +106,7 @@ services:
       placement:
         constraints:
           - "node.role==manager"
-          - "node.hostname==ip-172-31-19-183"    
+          - "node.hostname==ip-172.31.28.245"    
     networks:
       - monitoring
     environment:
