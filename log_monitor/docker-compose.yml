@@ -26,10 +26,10 @@ services:
         delay: 5s
         max_attempts: 3
         window: 30s
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 0.5G
+      # resources:
+      #   limits:
+      #     cpus: "0.5"
+      #     memory: 0.5G
       placement:
         constraints:
           - "node.role==manager"
@@ -58,10 +58,10 @@ services:
         delay: 5s
         max_attempts: 3
         window: 30s
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 0.5G
+      # resources:
+      #   limits:
+      #     cpus: "0.5"
+      #     memory: 0.5G
       placement:
         constraints:
           - "node.role==manager"
