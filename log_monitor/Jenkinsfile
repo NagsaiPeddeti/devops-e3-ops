@@ -1,38 +1,17 @@
 pipeline {
 
-    environment {
-       // CI = 'true'
-    }
+    agent any;
     stages {
-        stage('Build') {
+        stage('configs checkout') {
             steps {
-                sh 'npm install'
+               checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/NagsaiPeddeti/devops-e3-ops.git']]])
             }
         }
-        stage('Test') {
+        stage('publish to server and deploy') {
             steps {
-                sh './jenkins/scripts/test.sh'
+             sshPublisher(publishers: [sshPublisherDesc(configName: 'docker3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cd log_monitor && sh deploy.sh', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'log_monitor/**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
-        stage('Deliver for development') {
-            when {
-                branch 'development' 
-            }
-            steps {
-                sh './jenkins/scripts/deliver-for-development.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/scripts/kill.sh'
-            }
-        }
-        stage('Deploy for production') {
-            when {
-                branch 'production'  
-            }
-            steps {
-                sh './jenkins/scripts/deploy-for-production.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/scripts/kill.sh'
-            }
-        }
+       
     }
 }
