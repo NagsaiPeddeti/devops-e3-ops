@@ -7,6 +7,25 @@ registry:
     - TZ=Asia/Kolkata
   volumes:
     - registy:/var/lib/registry
+  deploy:
+    mode: replicated
+    replicas: 1
+    update_config:
+      parallelism: 1
+      delay: 10s
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      max_attempts: 3
+      window: 30s
+    resources:
+      limits:
+        cpus: "0.5"
+        memory: 0.5G
+    placement:
+      constraints:
+        - "node.role==manager"
+        - "node.hostname==ip-172-31-28-245"
 volumes:
   registy:
   
