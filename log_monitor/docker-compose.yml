@@ -65,7 +65,7 @@ services:
       placement:
         constraints:
           - "node.role==manager"
-          - "node.hostname==ip-172-31-26-177"  
+          - "node.hostname==ip-172-31-28-245"  
     networks:
       - opensearch-net
   opensearch-dashboards:
