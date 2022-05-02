@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  app1:
+      image: ${IMAGE_NAME}
+      stop_grace_period: 10s
+      ports:
+        - 8083:80
+      configs:
+        - source: production.json
+          target: /usr/src/app/config/production.json
+      deploy:
+         replicas: 1
+         update_config:
+           parallelism: 1
+           delay: 10s
+         restart_policy:
+           condition: on-failure
+           delay: 5s
+           max_attempts: 3
+           window: 30s
+         resources:
+           limits:
+              cpus: "0.5"
+              memory: 0.5G
+          # placement:
+          #   constraints:
+          #     - "node.role==manager"
+          #     - "node.hostname==ip-172-31-19-183"
+      environment:
+        - "TZ=Asia/Kolkata"
+        - "NODE_ENV=production"
+        - "PORT=80"
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 30s
+        
+      networks:
+        - internal
+configs:
+  production.json:
+    name: ${CONFIG_NAME}
+    external: true
+networks:
+  internal:
+   
+
+
+        
