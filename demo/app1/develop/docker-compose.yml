@@ -5,6 +5,9 @@ services:
       stop_grace_period: 10s
       ports:
         - 8082:80
+      configs:
+        - source: stage.json
+          target: /usr/src/app/config/stage.json
       deploy:
          replicas: 1
          update_config:
@@ -25,8 +28,21 @@ services:
           #     - "node.hostname==ip-172-31-19-183"
       environment:
         - "TZ=Asia/Kolkata"
+        - "NODE_ENV=stage"
+        - "PORT=80"
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 30s
+        
       networks:
         - internal
+configs:
+  stage.json:
+    name: ${CONFIG_NAME}
+    external: true
 networks:
   internal:
    
