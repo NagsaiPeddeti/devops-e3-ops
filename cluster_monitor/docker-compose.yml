@@ -7,9 +7,13 @@ networks:
 volumes:
   prometheus_data: 
   grafana_data:
+  tempo_data:
 configs:
   prometheus.yml:
     name: ${PROMETHEUS_CONFIG_NAME}
+    external: true
+  tempo.yml:
+    name: ${TEMPO_CONFIG_NAME}
     external: true
 
 services:
@@ -155,5 +159,28 @@ services:
       # - "4317:4317"  # otlp grpc
       # - "4318:4318"  # otlp http
       - "9411:9411"   # zipkin
+    configs:
+      - source: tempo.yml
+        target: /etc/tempo.yaml
+    volumes:
+      - tempo_data:/tmp/tempo
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.5G
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==ip-172-31-26-177"
     networks:
       monitoring2:

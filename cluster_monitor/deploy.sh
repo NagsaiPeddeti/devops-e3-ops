@@ -1,5 +1,8 @@
 export PROMETHEUS_CONFIG_NAME=prometheus.yml3
+export TEMPO_CONFIG_NAME=tempo.yml
 cat configs/prometheus.yml | docker config create ${PROMETHEUS_CONFIG_NAME} -
+
+cat configs/tempo.yml | docker config create ${TEMPO_CONFIG_NAME} -
 
 docker stack deploy -c docker-compose.yml cluster_monitor
 
