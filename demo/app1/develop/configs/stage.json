@@ -1,3 +1,9 @@
 {
-    "configName":"UAT"
+    "configName":"UAT",
+    "logProperties":{
+        "lokiLogger":false,
+        "lokiUrl":"http://:3100",
+        "level":"debug",
+        "serviceName":"app1"
+    }
 }
