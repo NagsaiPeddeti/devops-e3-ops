@@ -5,5 +5,9 @@
         "lokiUrl":"http://172.31.28.245:3100",
         "level":"debug",
         "serviceName":"app1"
+    },
+    "tracerProperties":{
+        "url":"http://172.31.28.245:9411",
+        "serviceName":"app1"
     }
 }
