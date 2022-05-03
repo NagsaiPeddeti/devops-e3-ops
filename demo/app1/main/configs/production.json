@@ -1,3 +1,10 @@
 {
-    "configName":"Production"
+    "configName":"Production",
+    "logProperties":{
+        "lokiLogger":true,
+        "lokiUrl":"http://172.31.28.245:3100",
+        "level":"debug",
+        "serviceName":"app1_prod"
+    }
+
 }

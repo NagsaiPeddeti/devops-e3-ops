@@ -26,6 +26,7 @@ services:
           #   constraints:
           #     - "node.role==manager"
           #     - "node.hostname==ip-172-31-19-183"
+
       environment:
         - "TZ=Asia/Kolkata"
         - "NODE_ENV=stage"
@@ -45,7 +46,7 @@ configs:
     external: true
 networks:
   internal:
-   
+
 
 
         
