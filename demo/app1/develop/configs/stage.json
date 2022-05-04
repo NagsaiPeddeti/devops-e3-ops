@@ -7,7 +7,7 @@
         "serviceName":"app1"
     },
     "tracerProperties":{
-        "url":"http://172.31.28.245:9411",
+        "url":"http://172.31.28.245:9411/api/v2/spans",
         "serviceName":"app1"
     }
 }
